@@ -1,5 +1,6 @@
 import os, sys # for file path
 import re  # mod strings regex
+import fnmatch # to remove files in copy directory 
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -12,16 +13,20 @@ del path
 # single columns included in bad csv file to text description file,
 # csv data to seperate csv file
 
+#Todo: steps: Convert cvs non column match to descriptive txt.
+# Convert column data to pd dataframe, and dataframe to Csv file.
+# Load csv into mysql table.  Load descriptive file into mysql table.  Link with common Identifier.
+
 def format_file():
 
     DataDirectory = '/TestData'  # ) sources the path to the csv file for format standardization
-
 
     # Define working directory
     working_dir = ''.join([os.getcwd(), DataDirectory, '/'])
 
     # Define file directory for copy placement, make sure to not dupe any files in here
-    skip_copy_directory = ''.join([working_dir, 'Copy_Formatted_Files','/'])
+    skip_copy_directory_csv = ''.join([working_dir, 'Copy_Formatted_CSV_Files','/'])
+    skip_copy_directory_txt = ''.join([working_dir, 'Copy_Formatted_TXT_Files', '/'])
 
     # ) walks thru every file/dir/root in working directory
 
@@ -32,11 +37,11 @@ def format_file():
         for filename in files:  # looks thru every file
 
             # if not skipdirectory then do the below logic
-            if current_path != skip_copy_directory:
+            if current_path != skip_copy_directory_csv or current_path != skip_copy_directory_txt:
 
                 # check if copy file already exist/ delete if old version/ create new if none
-                exist_dircheck = os.path.isdir(skip_copy_directory)
-                exist_filecheck = os.path.isfile(''.join([skip_copy_directory, filename]))
+                exist_dircheck = os.path.isdir(skip_copy_directory_csv)
+                exist_filecheck = os.path.isfile(''.join([skip_copy_directory_csv, filename]))
 
 
                 # Make files in new directory, Remove and remake if already there
@@ -50,14 +55,27 @@ def format_file():
                 else:
                     os.mkdir(skip_copy_directory)
 
+                #not stripping .csv extension from file name due to recursive loop copy file multiplying like crazy that I dont feel like debugging
 
-                file = open(''.join([skip_copy_directory, filename]),'w+') # (this is the write file)
+                file = open(''.join([skip_copy_directory, filename, '_formatted.csv']),'w+') # (this is the write file for csv conversion)
+
+
+                #Todo Write Text file (create file) code goes here
+
 
 
                 #)File content formatting and duplications Steps
 
 
                 with open(os.path.join(working_dir,'Test.csv'), 'r', newline='') as file_data: # this is the read file
+
+                    #Todo Strip mismatched column data goes here, count max columns,
+                    # only write if column data equal to max columns,
+                    # write anything less then max columns into text file
+
+
+
+
 
                     #Convert import file to list to prepare for formatting and copying
                     listconversion = list(file_data) # filedata converted to list form
