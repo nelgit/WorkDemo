@@ -1,6 +1,6 @@
 import os, sys # for file path
 import re  # mod strings regex
-import fnmatch # to remove files in copy directory 
+import fnmatch # to remove files in copy directory
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -25,6 +25,8 @@ def format_file():
     working_dir = ''.join([os.getcwd(), DataDirectory, '/'])
 
     # Define file directory for copy placement, make sure to not dupe any files in here
+        #Todo: add in wild card handler to skip directory so it handles sub directories and files
+
     skip_copy_directory_csv = ''.join([working_dir, 'Copy_Formatted_CSV_Files','/'])
     skip_copy_directory_txt = ''.join([working_dir, 'Copy_Formatted_TXT_Files', '/'])
 
@@ -38,6 +40,8 @@ def format_file():
 
             # if not skipdirectory then do the below logic
             if current_path != skip_copy_directory_csv or current_path != skip_copy_directory_txt:
+                    #Todo:  try instead of adding it to harcoded path, instead add fnmatch to if logic in order
+                    # to skip directory and prevent duplicates
 
                 # check if copy file already exist/ delete if old version/ create new if none
                 exist_dircheck = os.path.isdir(skip_copy_directory_csv)
