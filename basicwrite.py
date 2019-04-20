@@ -7,7 +7,12 @@ if not path in sys.path:
     sys.path.insert(1, path)
 del path
 
-def format_file(symbols=None):
+
+#Todo: add in some functionality to split human format,
+# single columns included in bad csv file to text description file,
+# csv data to seperate csv file
+
+def format_file():
 
     DataDirectory = '/TestData'  # ) sources the path to the csv file for format standardization
 
@@ -29,7 +34,7 @@ def format_file(symbols=None):
             # if not skipdirectory then do the below logic
             if current_path != skip_copy_directory:
 
-                # check if copy file alrady exist/ delete if old version/ create new if none
+                # check if copy file already exist/ delete if old version/ create new if none
                 exist_dircheck = os.path.isdir(skip_copy_directory)
                 exist_filecheck = os.path.isfile(''.join([skip_copy_directory, filename]))
 
@@ -39,14 +44,14 @@ def format_file(symbols=None):
                     if exist_filecheck:
 
                         try:
-                            os.remove(''.join([skip_copy_directory, filename.strip]))  # correct file name later  (not removing file and copying it instead)
+                            os.remove(''.join([skip_copy_directory, filename]))
                         except:
                             pass
                 else:
                     os.mkdir(skip_copy_directory)
 
 
-                file = open(''.join([skip_copy_directory, filename]),'w+') # rip the butt off reattach copy marker (this is the write file)
+                file = open(''.join([skip_copy_directory, filename]),'w+') # (this is the write file)
 
 
                 #)File content formatting and duplications Steps
