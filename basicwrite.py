@@ -42,28 +42,27 @@ def format_file():
 
                     # check if copy file already exist/ delete if old version/ create new if none
                     exist_dircheck = os.path.isdir(skip_copy_directory)
-                    exist_filecheck = os.path.isfile(''.join([skip_copy_directory, filename]))
+                    exist_filecheck = os.path.isfile(wildcardhandler.fnmatch( ''.join([skip_copy_directory, filename]),'*'))  # added wildcard for multi types
+                    filecheck_path = ''.join([skip_copy_directory, filename])
 
                     # Make files in new directory, Remove and remake files if already there
                     if exist_dircheck:
                         if exist_filecheck:
 
                             try:
-                                os.remove(wildcardhandler.fnmatch(exist_filecheck,'*')) #remove dupes if any
+                                os.remove(wildcardhandler.fnmatch(filecheck_path,'*')) #remove dupes if any, corrected bug
                             except:
                                 pass
-
                     else:
                         os.mkdir(skip_copy_directory)
 
-                         
 
-                    file = open(''.join([skip_copy_directory, filename, '_formatted.csv']),'w+')  # (this is the write file for csv conversion moved inside if logic to fix dup bug
+                    #make cvs file storage
+                    file = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted.csv']),'w+')  # (this is the write file for csv conversion
 
+                    #make non matching columnes txt file storage
+                    file = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted_unmatched_columns.txt']),'w+')  # (this is the write file for csv conversion
 
-
-
-                    #Todo Write Text file (create file) code goes here
 
 
 
