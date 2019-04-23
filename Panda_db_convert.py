@@ -11,13 +11,19 @@ del path
 
 def convert_to_pd_dataframe():
 
-    import_dir = '/TestData/Copy_Formatted_Files/Test_formatted.csv'  # simple demo, not gonna go thru every file, just this test file
+    import_dir = '/TestData/Copy_Formatted_Files/'  # marks where the created files are stored
+    csv_file='Test_formatted.csv'  # for simple demo purposes
+    txt_file='Test_formatted_unmatched_columns.txt' # for simple demo purposes
 
     # Define working directory
-    working_dir = ''.join([os.getcwd(), import_dir])
+    csv_file_part_of_df = ''.join([os.getcwd(), import_dir, csv_file])
+    txt_file_part_of_df = ''.join([os.getcwd(), import_dir, txt_file])
 
-    print(working_dir)
+    created_df = pd.read_csv(csv_file_part_of_df, index_col=None, header=None)
 
-    created_db = pd.read_csv(working_dir, index_col=None, header=None)
+    # adding in header columns that uniquely identify from text file associated with csv
 
-    return created_db
+    #created_df['ID_1']=
+    #created_df['ID_2']=
+
+    return created_df
