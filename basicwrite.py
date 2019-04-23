@@ -8,16 +8,6 @@ if not path in sys.path:
     sys.path.insert(1, path)
 del path
 
-
-#Todo: add in some functionality to split human format,
-# single columns included in bad csv file to text description file,
-# csv data to seperate csv file
-
-#Todo: steps: Convert cvs non column match to descriptive txt.
-# Convert column data to pd dataframe, and dataframe to Csv file.
-# Load csv into mysql table.  Load descriptive file into mysql table.  Link with common Identifier.
-
-
 def format_file():
 
     DataDirectory = '/TestData'  # ) sources the path to the csv file for format standardization
@@ -35,7 +25,7 @@ def format_file():
 
         for filename in files:  # looks thru every file
 
-            if os.path.isfile(''.join([working_dir,'/',filename])):  # added to fix iteration on directory  #must BE ABSOLUTE PATH
+            if os.path.isfile(''.join([working_dir,'/',filename])) and filename !='.directory': # added to fix iteration on directory  #must BE ABSOLUTE PATH
 
                 # if not skipdirectory then do the below logic
                 if current_path != wildcardhandler.fnmatch(skip_copy_directory, '*'):  # try and prevent any logic from executing in directory and sub/files
@@ -58,26 +48,15 @@ def format_file():
 
 
                     #make cvs file storage
-                    file = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted.csv']),'w+')  # (this is the write file for csv conversion
+                    file_csv = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted.csv']),'w+')  # (this is the write file for csv conversion
 
                     #make non matching columnes txt file storage
-                    file = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted_unmatched_columns.txt']),'w+')  # (this is the write file for csv conversion
-
-
+                    file_txt = open(''.join([skip_copy_directory, re.sub('.csv','',filename), '_formatted_unmatched_columns.txt']),'w+')  # (this is the write file for csv conversion
 
 
                     #)File content formatting and duplications Steps
 
-
                     with open(os.path.join(working_dir,'Test.csv'), 'r', newline='') as file_data: # this is the read file
-
-                    #Todo Strip mismatched column data goes here, count max columns,
-                    # only write if column data equal to max columns,
-                    # write anything less then max columns into text file
-
-
-
-
 
                         #Convert import file to list to prepare for formatting and copying
                         listconversion = list(file_data) # filedata converted to list form
@@ -89,8 +68,9 @@ def format_file():
                         stripped_list = [re.sub(r'\\n', '', str(line)) for line in stripped_list]  # regex strip newline from list
                         stripped_list = [re.sub(r'\\r', '', str(line)) for line in stripped_list]  # regex strip newline from list
 
+                        maxlength = 0  # for use in finding max column length within file
 
-                        # go one list deeper
+                        # go one list deeper for elements in list clearning
                         for outer_list_element in stripped_list: # layer 1 deep
 
                             #Formatting Inner String(narrow)
@@ -100,10 +80,33 @@ def format_file():
                             outer_list_element = outer_list_element.lstrip() # remove left side lead  whitespaces or whatever pattern you put into strip function
                             outer_list_element = re.sub(r'\,+$', '', outer_list_element)  # regex strip last misc coma
 
-                            # start appending to blank copy line by line
-                            file.write(outer_list_element)
-                            file.write('\n')
+                            # calculate max number of columns per csv row
+                            inner_split_list = [outer_list_element.split(',')]
+                            inside_list = inner_split_list[0]
+                            length = len(inside_list)
 
-                    file.close()
+                            if length > maxlength:
+                                maxlength_of_file = length
 
+                            # store formatted line in intermediate list
+
+
+
+
+
+                        # write from intermediate list to file csv and txt
+                        for outer_list_element in stripped_list:
+
+                            length = len(placeholder)
+
+                            # start appending to copy file txt and csv line by line
+                            if length == maxlength_of_file:
+                                file_csv.write(outer_list_element)
+                                file_csv.write('\n')
+                            else:
+                                file_txt.write(outer_list_element)
+                                file_txt.write('\n')
+
+                    file_csv.close()
+                    file_txt.close()
     return
