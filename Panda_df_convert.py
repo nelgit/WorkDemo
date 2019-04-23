@@ -1,7 +1,7 @@
 import os, sys # for file path
 import pandas as pd # for creating pd dataframe
 import re # for cleaning txt file data
-
+import numpy as np # for handling missing data placeholder
 
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -23,7 +23,6 @@ def convert_to_pd_dataframe():
     created_df = pd.read_csv(csv_file_part_of_df, index_col=None, header=None)
 
     # adding in header columns that uniquely identify from text file associated with csv, other other misc info
-    # not throwing directly into another df, due to fact that columns wont necessarily be the same length
 
     # retrieve txt info
     with open(txt_file_part_of_df, 'r', newline='') as file_data:  # this is the read file
@@ -51,7 +50,22 @@ def convert_to_pd_dataframe():
 
             if len(listconversion)==1: # set everything in the column uniformly if 1 element long
                 created_df[header]=listconversion[0]
-            else:                                       # use more complex logic to set to length and fill null if its a different format
-                created_df[header] = listconversion[0]
+
+            elif 1: #  some arbitrary condition only for demo  # case txt file unmatching columns are meant to be single column data
+                # use more complex logic to set to length and fill null if its a different format
+                # combine unmatching lengths by throwing another dataframe into another dataframe
+
+                #data = {header: listconversion[1:]} # skip slice [0] because that is the header value
+                data = {header: [1,2,3,4,5,5]} # to illustrate example
+                temp_df = pd.DataFrame(data) # create temp dataframe to house values
+
+                created_df[header] = np.nan # create column to fill, default np.nan values (missing data)
+                created_df = created_df.combine_first(temp_df) # combine both dataframe into single dataframe.
+                                                           # Allows for creation of dataframe with mismatched column length
+                                                           # if original data entry was messed up to begin with.
+                                                           # This demo assumes messed up data was single column data not multi column
+                                                           # data, which would require a different process
+
+            else: # case unmatching columns are meant to be additional column data
 
     return created_df
