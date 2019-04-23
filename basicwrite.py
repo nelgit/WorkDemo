@@ -69,6 +69,7 @@ def format_file():
                         stripped_list = [re.sub(r'\\r', '', str(line)) for line in stripped_list]  # regex strip newline from list
 
                         maxlength = 0  # for use in finding max column length within file
+                        intermediate_list = []
 
                         # go one list deeper for elements in list clearning
                         for outer_list_element in stripped_list: # layer 1 deep
@@ -90,21 +91,19 @@ def format_file():
 
                             # store formatted line in intermediate list
 
-
-
-
+                            intermediate_list.append(outer_list_element)
 
                         # write from intermediate list to file csv and txt
-                        for outer_list_element in stripped_list:
+                        for elements in intermediate_list:
 
-                            length = len(placeholder)
+                            length = len(elements.split(','))
 
                             # start appending to copy file txt and csv line by line
                             if length == maxlength_of_file:
-                                file_csv.write(outer_list_element)
+                                file_csv.write(elements)
                                 file_csv.write('\n')
                             else:
-                                file_txt.write(outer_list_element)
+                                file_txt.write(elements)
                                 file_txt.write('\n')
 
                     file_csv.close()
