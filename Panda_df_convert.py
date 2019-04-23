@@ -9,6 +9,13 @@ if not path in sys.path:
     sys.path.insert(1, path)
 del path
 
+pd.set_option('display.max_rows', 999)
+pd.set_option('display.max_columns', 999)
+
+#-------------------------------------------------------------
+show = 0 # set this to 0, 1, or 2 to see the demo returns
+#-------------------------------------------------------------
+
 
 def convert_to_pd_dataframe():
 
@@ -48,10 +55,10 @@ def convert_to_pd_dataframe():
             listconversion = string_convert.split(',')
             header = listconversion[0]
 
-            if len(listconversion)==1: # set everything in the column uniformly if 1 element long
+            if len(listconversion)==1 and show == 0: # set everything in the column uniformly if 1 element long
                 created_df[header]=listconversion[0]
 
-            elif 1: #  some arbitrary condition only for demo  # case txt file unmatching columns are meant to be single column data
+            elif show == 1: #  some arbitrary condition only for demo  # case txt file unmatching columns are meant to be single column data
                 # use more complex logic to set to length and fill null if its a different format
                 # combine unmatching lengths by throwing another dataframe into another dataframe
 
@@ -66,6 +73,16 @@ def convert_to_pd_dataframe():
                                                            # This demo assumes messed up data was single column data not multi column
                                                            # data, which would require a different process
 
-            else: # case unmatching columns are meant to be additional column data
+            elif show == 2:# case unmatching columns are meant to be additional fullcolumn data
+
+                listconversion = [ {'business':[1,2,3,4,5]}, {'country':[1,2,3,4,5]}, {'Martial Arts Style':[1,2,3,4,5]}, {'Degree':[1,2,3,4,5]}] # to illustrate example
+
+                print(listconversion[0])
+
+                for elements in listconversion:
+
+                    data = elements
+                    temp_df = pd.DataFrame(data)  # create temp dataframe to house values
+                    created_df = created_df.combine_first(temp_df)
 
     return created_df
