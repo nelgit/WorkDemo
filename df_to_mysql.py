@@ -1,7 +1,7 @@
-import Panda_df_convert as produced_df
-import pandas as pd
-from sqlalchemy import create_engine
-import mysql.connector
+import Panda_df_convert as produced_df # to generated a panda df
+import pandas as pd # for pandas method pd.read_sql()
+from sqlalchemy import create_engine # to use create_engine and other engine methods
+import mysql.connector # not used but included just in case
 
 
 def convert_to_mysql():
