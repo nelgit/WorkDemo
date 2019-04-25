@@ -27,15 +27,15 @@ def convert_to_mysql():
     #Convert dataframe to sql
     dataframe_to_convert.to_sql(name='WorkDemo', con=engine, if_exists='replace', index=False)
 
+    # Query server to show result of dataframe to mysql server push
+    query = 'SELECT * FROM WorkDemo.WorkDemo;'
+    #print(pd.read_sql(query, engine))
+    sql_return = pd.read_sql(query, engine)
+
     # Close database connection when done
     connection.close()
 
     # Close out any remaining connections in memory by removing engine.
     engine.dispose()
 
-    # Query server to show result of dataframe to mysql server push
-    query = ''
-    
-    print()
-
-    return
+    return sql_return
